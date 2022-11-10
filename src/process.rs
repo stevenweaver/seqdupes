@@ -1,13 +1,10 @@
 use bio::io::fasta;
-use serde_json::{Map, Value};
-use serde_json::json;
-use regex::RegexSet;
+use serde_json::{Map, json};
 use std::error::Error;
 use std::ffi::OsStr;
 use std::fs;
 use std::io::Write;
 use std::io;
-use std::io::prelude::*;
 use std::path::Path;
 use std::str;
 
