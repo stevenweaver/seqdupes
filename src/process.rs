@@ -18,7 +18,7 @@ pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(
 
     //FASTA file related
     let file = Path::new(&filename).to_str().unwrap();
-    let mut records = fasta::Reader::from_file(file).unwrap().records();
+    let records = fasta::Reader::from_file(file).unwrap().records();
     let mut seq_duplicates: HashMap<String, Vec<String>> = HashMap::new();
     let mut dupe_headers = Map::new();
 
@@ -30,7 +30,7 @@ pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(
 
 
     // Gather data from every record
-    while let Some(record) = records.next() {
+    for record in records {
 
         let seqrec = record.unwrap();
 
@@ -57,14 +57,14 @@ pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(
         dupe_headers.insert(sequence_id.to_string(), json!(value));
 
         writer
-            .write(&sequence_id, None, key.as_bytes())
+            .write(sequence_id, None, key.as_bytes())
             .expect("Error writing record.");
     }
 
     let mut file = fs::File::create(&output_json).unwrap();
     file.write_all(json!(dupe_headers).to_string().as_bytes());
 
-    return true;
+    true
 }
 
 pub(crate) fn process<P: AsRef<Path> + AsRef<OsStr>>(
