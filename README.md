@@ -1,4 +1,4 @@
-Parses fasta records based on list of either header names or regexes
+Removes duplicates from FASTA file
 
 ## Installation
 
@@ -11,7 +11,7 @@ Download the source code and run
 ## Usage
 
 ```
-seqsplitter -f path/to/sequence.fastq -l path/to/list.txt
+seqdupes -f path/to/sequence.fastq -j path/to/output.json > no_dupes.fas
 ```
 
 Arguments: 
@@ -19,9 +19,4 @@ Arguments:
 | Parameter                 | Default       | Description   |	
 | :------------------------ |:-------------:| :-------------|
 | -f --fasta         |	-           |The path to the FASTQ file to use
-| -l --list          |	-           |List of ids to parse out
-| -r --regex         |	false       |Interpret list as regex
-| -u --assume_unique |	false       |Assume list is unique and exit when all seqs in list are found
-| -v --version       |	-           |Print version information
-# seqdupes
-# seqdupes
+| -j --json         |	-           |The output path to list duplicates
