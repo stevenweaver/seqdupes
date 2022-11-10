@@ -18,7 +18,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         )
         .arg(
             Arg::new("json")
-                .help("The duplicate list in JSON") 
+                .help("The duplicate list in JSON")
                 .takes_value(true)
                 .required(true)
                 .short('j')
@@ -28,6 +28,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     crate::process::process(
         matches.value_of("fasta").unwrap(),
-        matches.value_of("json").unwrap()
+        matches.value_of("json").unwrap(),
     )
 }

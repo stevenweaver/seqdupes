@@ -1,21 +1,17 @@
 use bio::io::fasta;
-use serde_json::{Map, json};
+use serde_json::{json, Map};
 use std::error::Error;
 use std::ffi::OsStr;
 use std::fs;
-use std::io::Write;
 use std::io;
+use std::io::Write;
 use std::path::Path;
 use std::str;
 
 use std::collections::HashMap;
 
 // String Match Option
-pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(
-    filename: P,
-    output_json: P
-) -> bool {
-
+pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(filename: P, output_json: P) -> bool {
     //FASTA file related
     let file = Path::new(&filename).to_str().unwrap();
     let records = fasta::Reader::from_file(file).unwrap().records();
@@ -28,10 +24,8 @@ pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(
     // Add sequence to hash if doesn't already exist, then add header.
     // if the sequence already exists, add header to vector.
 
-
     // Gather data from every record
     for record in records {
-
         let seqrec = record.unwrap();
 
         let sequence_id_bytes = seqrec.id();
@@ -69,7 +63,7 @@ pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(
 
 pub(crate) fn process<P: AsRef<Path> + AsRef<OsStr>>(
     filename: P,
-    output_json: P, 
+    output_json: P,
 ) -> Result<(), Box<dyn Error>> {
     compress_duplicates(filename, output_json);
     Ok(())
