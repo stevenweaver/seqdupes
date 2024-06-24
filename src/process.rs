@@ -1,5 +1,6 @@
 use bio::io::fasta;
 use serde_json::{json, Map};
+use std::collections::HashMap;
 use std::error::Error;
 use std::ffi::OsStr;
 use std::fs;
@@ -7,7 +8,6 @@ use std::io;
 use std::io::Write;
 use std::path::Path;
 use std::str;
-use std::collections::HashMap;
 
 pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(
     filename: P,
@@ -26,7 +26,11 @@ pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(
             .trim()
             .to_string();
         let seq_str = str::from_utf8(seqrec.seq()).unwrap();
-        let key = if filter_by_header { entire_header.clone() } else { seq_str.to_owned() };
+        let key = if filter_by_header {
+            entire_header.clone()
+        } else {
+            seq_str.to_owned()
+        };
 
         if let Some(headers) = seq_duplicates.get_mut(&key) {
             headers.push(entire_header);
@@ -56,4 +60,3 @@ pub(crate) fn process<P: AsRef<Path> + AsRef<OsStr>>(
     compress_duplicates(filename, output_json, filter_by_header);
     Ok(())
 }
-
