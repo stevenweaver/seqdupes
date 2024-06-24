@@ -1,0 +1,15 @@
+# .github/dependabot.yml
+version: 2
+updates:
+  # Enable updates for Rust / Cargo
+  - package-ecosystem: "cargo"  # For Rust projects
+    directory: "/"              # Location of package manifests
+    schedule:
+      interval: "weekly"        # Check for updates weekly
+    open-pull-requests-limit: 10  # Maximum number of open pull requests Dependabot should have at any time
+    # Optional: You can specify assignees for the pull requests, labels, or milestone numbers
+    assignees:
+      - "stevenweaver"
+    labels:
+      - "dependencies"
+      - "rust"
