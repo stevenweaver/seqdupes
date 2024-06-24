@@ -24,10 +24,20 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .short('j')
                 .long("json"),
         )
+		.arg(
+			Arg::new("by_header")
+				.help("Filters duplicates based on headers")
+				.takes_value(false)
+				.required(false)
+				.short('b')
+				.long("by-header"),
+		)
         .get_matches();
 
-    crate::process::process(
-        matches.value_of("fasta").unwrap(),
-        matches.value_of("json").unwrap(),
-    )
+		crate::process::process(
+			matches.value_of("fasta").unwrap(),
+			matches.value_of("json").unwrap(),
+			matches.is_present("by_header")
+		)
+
 }

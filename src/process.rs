@@ -10,8 +10,11 @@ use std::str;
 
 use std::collections::HashMap;
 
-// String Match Option
-pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(filename: P, output_json: P) -> bool {
+pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(
+    filename: P,
+    output_json: P,
+    filter_by_header: bool
+) -> bool {
     //FASTA file related
     let file = Path::new(&filename).to_str().unwrap();
     let records = fasta::Reader::from_file(file).unwrap().records();
@@ -21,32 +24,23 @@ pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(filename: P, output_js
     // write JSON file
     let mut writer = fasta::Writer::new(io::stdout());
 
-    // Add sequence to hash if doesn't already exist, then add header.
-    // if the sequence already exists, add header to vector.
-
     // Gather data from every record
     for record in records {
         let seqrec = record.unwrap();
-
-        let sequence_id_bytes = seqrec.id();
-        let sequence_description_bytes = seqrec.desc().unwrap_or("");
-
-        let entire_header_raw = [sequence_id_bytes, sequence_description_bytes].join(" ");
-        let entire_header = entire_header_raw.trim();
+        let entire_header = format!("{} {}", seqrec.id(), seqrec.desc().unwrap_or("")).trim().to_string();
         let seq_str = str::from_utf8(seqrec.seq()).unwrap();
 
-        let seq = seq_duplicates.get_mut(seq_str);
+        let key = if filter_by_header { entire_header.clone() } else { seq_str.to_owned() };
 
-        if let Some(s) = seq {
-            s.push(entire_header.to_string());
+        if let Some(headers) = seq_duplicates.get_mut(&key) {
+            headers.push(entire_header);
         } else {
-            seq_duplicates.insert(seq_str.to_owned(), vec![entire_header.to_string()]);
+            seq_duplicates.insert(key, vec![entire_header]);
         }
     }
 
     // Write out FASTA with no duplicates, and write out a JSON containing only duplicates
     for (key, value) in &seq_duplicates {
-        //println!("{}: {:?}", key, value);
         let sequence_id = value.last().unwrap();
         dupe_headers.insert(sequence_id.to_string(), json!(value));
 
@@ -64,7 +58,9 @@ pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(filename: P, output_js
 pub(crate) fn process<P: AsRef<Path> + AsRef<OsStr>>(
     filename: P,
     output_json: P,
+    filter_by_header: bool
 ) -> Result<(), Box<dyn Error>> {
-    compress_duplicates(filename, output_json);
+    compress_duplicates(filename, output_json, filter_by_header);
     Ok(())
 }
+
