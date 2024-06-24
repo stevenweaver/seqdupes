@@ -48,8 +48,10 @@ pub fn compress_duplicates<P: AsRef<Path> + AsRef<OsStr>>(
     }
 
     let mut file = fs::File::create(&output_json).unwrap();
-    file.write_all(json!(dupe_headers).to_string().as_bytes());
-    true
+    match file.write_all(json!(dupe_headers).to_string().as_bytes()) {
+        Ok(_) => true,
+        Err(_e) => false,
+    }
 }
 
 pub(crate) fn process<P: AsRef<Path> + AsRef<OsStr>>(
