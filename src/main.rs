@@ -1,5 +1,3 @@
-mod process;
-
 use clap::{App, Arg};
 use std::error::Error;
 
@@ -24,20 +22,19 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .short('j')
                 .long("json"),
         )
-		.arg(
-			Arg::new("by_header")
-				.help("Filters duplicates based on headers")
-				.takes_value(false)
-				.required(false)
-				.short('b')
-				.long("by-header"),
-		)
+        .arg(
+            Arg::new("by_header")
+                .help("Filters duplicates based on headers")
+                .takes_value(false)
+                .required(false)
+                .short('b')
+                .long("by-header"),
+        )
         .get_matches();
 
-		crate::process::process(
-			matches.value_of("fasta").unwrap(),
-			matches.value_of("json").unwrap(),
-			matches.is_present("by_header")
-		)
-
+    crate::process::process(
+        matches.value_of("fasta").unwrap(),
+        matches.value_of("json").unwrap(),
+        matches.is_present("by_header"),
+    )
 }
