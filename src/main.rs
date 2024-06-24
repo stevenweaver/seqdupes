@@ -1,3 +1,5 @@
+mod process;
+
 use clap::{App, Arg};
 use std::error::Error;
 
