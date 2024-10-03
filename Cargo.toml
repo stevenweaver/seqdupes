@@ -20,7 +20,7 @@ reqwest = "0.12.7"
 rustc-hash = "2.0.0"
 itertools = "0.13.0"
 regex = "1"
-bio = "2.0.1"
+bio = "2.0.3"
 
 [[bin]]
 name = "seqdupes"
