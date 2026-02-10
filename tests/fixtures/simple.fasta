@@ -1,0 +1,8 @@
+>seq1 first sequence
+ATCGATCG
+>seq2 second sequence
+GCTAGCTA
+>seq3 duplicate of seq1
+ATCGATCG
+>seq4 another unique
+TTTTAAAA

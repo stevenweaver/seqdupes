@@ -1,6 +1,6 @@
 mod process;
 
-use clap::{Arg, Command};
+use clap::{Arg, ArgAction, Command};
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -10,10 +10,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         .about("Reduces sequence duplicates")
         .arg(
             Arg::new("fasta")
-                .help("The input FASTA file (gzip acceptable).")
-                .required(true)
+                .help("The input FASTA/FASTQ file (gzip acceptable, use '-' for stdin)")
                 .short('f')
-                .long("fasta"),
+                .long("fasta")
+                .default_value("-"),
         )
         .arg(
             Arg::new("json")
@@ -26,13 +26,16 @@ fn main() -> Result<(), Box<dyn Error>> {
             Arg::new("by_header")
                 .help("Filters duplicates based on headers")
                 .short('b')
-                .long("by-header"),
+                .long("by-header")
+                .action(ArgAction::SetTrue),
         )
         .get_matches();
 
+    let mut stdout = std::io::stdout();
     crate::process::process(
         matches.get_one::<String>("fasta").unwrap(),
         matches.get_one::<String>("json").unwrap(),
-        matches.contains_id("by_header"),
+        matches.get_flag("by_header"),
+        &mut stdout,
     )
 }

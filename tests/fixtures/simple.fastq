@@ -1,0 +1,12 @@
+@seq1 first sequence
+ATCGATCG
++
+IIIIIIII
+@seq2 second sequence
+GCTAGCTA
++
+IIIIIIII
+@seq3 duplicate of seq1
+ATCGATCG
++
+IIIIIIII

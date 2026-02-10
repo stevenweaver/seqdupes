@@ -7,52 +7,22 @@ on:
     branches: [ main ]
 
 jobs:
-  Formatting:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
-          components: rustfmt
-      
+          components: rustfmt, clippy
+
       - name: Check format
         run: cargo fmt -- --check
-  
-  Linting:
-     runs-on: ubuntu-latest
-     steps:
-       - name: Checkout repository
-         uses: actions/checkout@v2
 
-       - name: Install stable toolchain
-         uses: actions-rs/toolchain@v1
-         with:
-           toolchain: stable
-           override: true
-           components: clippy
+      - name: Lint with clippy
+        run: cargo clippy -- -D warnings
 
-       - name: Lint with clippy
-         uses: actions-rs/clippy-check@v1
-         with:
-           token: ${{ secrets.GITHUB_TOKEN }}
-           
-  Testing:
-    needs: Formatting
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-
-      - name: Run cargo test
+      - name: Run tests
         run: cargo test

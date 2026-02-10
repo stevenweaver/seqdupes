@@ -1,8 +1,8 @@
 [package]
 name = "seqdupes"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Steven Weaver <steven@stevenweaver.org>"]
-edition = "2018"
+edition = "2021"
 license = "MIT"
 description = "Compress sequence duplicates"
 repository = "https://github.com/stevenweaver/seqdupes"
@@ -14,13 +14,14 @@ keywords = ["fastq", "fasta"]
 [dependencies]
 clap = "4.5.57"
 serde_json = "1.0.149"
-tera = "1.20.1"
-chrono = "0.4.43"
-reqwest = "0.13.2"
-rustc-hash = "2.1.1"
-itertools = "0.14.0"
-regex = "1"
 bio = "3.0.0"
+rustc-hash = "2.1.1"
+flate2 = "1"
+
+[dev-dependencies]
+tempfile = "3"
+assert_cmd = "2"
+predicates = "3"
 
 [[bin]]
 name = "seqdupes"
